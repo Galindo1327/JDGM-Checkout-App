@@ -8,36 +8,45 @@ generator client {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  price       Int
-  stock       Int
-  createdAt   DateTime @default(now())
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  price        Int
+  stock        Int
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
 }
 
 model Customer {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  phone     String
-  createdAt DateTime @default(now())
+  id           String        @id @default(uuid())
+  name         String
+  email        String
+  phone        String
+  createdAt    DateTime      @default(now())
+  deliveries   Delivery[]
+  transactions Transaction[]
 }
 
 model Delivery {
-  id         String   @id @default(uuid())
-  customerId String
-  address    String
-  city       String
-  fee        Int
-  createdAt  DateTime @default(now())
+  id           String        @id @default(uuid())
+  customerId   String
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  address      String
+  city         String
+  fee          Int
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
 }
 
 model Transaction {
   id          String   @id @default(uuid())
+  reference   String   @unique
   productId   String
+  product     Product  @relation(fields: [productId], references: [id])
   customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id])
   deliveryId  String
+  delivery    Delivery @relation(fields: [deliveryId], references: [id])
   amount      Int
   baseFee     Int
   deliveryFee Int
