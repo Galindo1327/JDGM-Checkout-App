@@ -4,3 +4,7 @@ dist/
 .env.local
 coverage/
 build/
+.agents/
+.claude/
+.windsurf/
+.cursor/
