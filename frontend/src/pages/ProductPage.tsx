@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   Alert,
   Button,
@@ -17,6 +17,7 @@ import {
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import CheckoutModal from '../components/CheckoutModal';
+import SummaryDrawer from '../components/SummaryDrawer';
 import { setStep } from '../features/checkout/checkoutSlice';
 import {
   fetchProducts,
@@ -34,7 +35,8 @@ export default function ProductPage() {
     (state) => state.products,
   );
   const checkoutStep = useAppSelector((state) => state.checkout.step);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const checkoutOpen = checkoutStep === 'checkout';
+  const summaryOpen = checkoutStep === 'summary';
 
   const selected =
     items.find((product) => product.id === selectedProductId) ?? items[0];
@@ -43,24 +45,22 @@ export default function ProductPage() {
     void dispatch(fetchProducts());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (checkoutStep === 'checkout') {
-      setCheckoutOpen(true);
-    }
-  }, [checkoutStep]);
-
   const handlePay = (product: Product) => {
     if (product.stock < 1) return;
     dispatch(selectProduct(product.id));
     dispatch(setStep('checkout'));
-    setCheckoutOpen(true);
   };
 
   const handleCloseCheckout = () => {
-    setCheckoutOpen(false);
-    if (checkoutStep === 'checkout') {
-      dispatch(setStep('product'));
-    }
+    dispatch(setStep('product'));
+  };
+
+  const handleContinueToSummary = () => {
+    dispatch(setStep('summary'));
+  };
+
+  const handleCloseSummary = () => {
+    dispatch(setStep('product'));
   };
 
   return (
@@ -212,7 +212,16 @@ export default function ProductPage() {
           )}
         </main>
 
-        <CheckoutModal open={checkoutOpen} onClose={handleCloseCheckout} />
+        <CheckoutModal
+          open={checkoutOpen}
+          onClose={handleCloseCheckout}
+          onContinue={handleContinueToSummary}
+        />
+        <SummaryDrawer
+          open={summaryOpen}
+          product={selected}
+          onClose={handleCloseSummary}
+        />
       </div>
     </ConfigProvider>
   );
