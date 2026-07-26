@@ -4,7 +4,6 @@ import {
   Button,
   ConfigProvider,
   Image,
-  Layout,
   Space,
   Spin,
   Tag,
@@ -13,10 +12,10 @@ import {
 import {
   CreditCardOutlined,
   ShoppingOutlined,
-  ShopOutlined,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import CheckoutModal from '../components/CheckoutModal';
+import StoreHeader from '../components/StoreHeader';
 import SummaryDrawer from '../components/SummaryDrawer';
 import { setStep } from '../features/checkout/checkoutSlice';
 import {
@@ -26,7 +25,6 @@ import {
 import { formatCop, getProductImage } from '../utils/product';
 import type { Product } from '../types/checkout';
 
-const { Header } = Layout;
 const { Title, Paragraph, Text } = Typography;
 
 export default function ProductPage() {
@@ -75,16 +73,11 @@ export default function ProductPage() {
       }}
     >
       <div className="product-page">
-        <Header className="store-header">
-          <div className="store-header__inner">
-            <ShopOutlined className="store-header__icon" />
-            <span className="store-header__brand">JDMG Store</span>
-          </div>
-        </Header>
+        <StoreHeader />
 
         <main className="product-page__content">
           <div className="product-page__intro">
-            <Title level={3} className="product-page__heading">
+            <Title level={2} className="product-page__heading">
               Elige tu producto
             </Title>
             <Paragraph className="product-page__subtitle">
