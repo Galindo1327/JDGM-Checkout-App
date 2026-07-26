@@ -179,6 +179,14 @@ export default function SummaryDrawer({
               <Text>Tarifa de envío</Text>
               <Text>{formatCop(deliveryFee)}</Text>
             </div>
+            <div className="summary-drawer__line">
+              <Text>Cuotas</Text>
+              <Text>
+                {checkout.installments === 1
+                  ? '1 cuota'
+                  : `${checkout.installments} cuotas`}
+              </Text>
+            </div>
             <div className="summary-drawer__line summary-drawer__line--total">
               <Text strong>Total</Text>
               <Text strong>{formatCop(total)}</Text>

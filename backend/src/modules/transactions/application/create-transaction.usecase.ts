@@ -60,6 +60,8 @@ export class CreateTransactionUseCase {
       const amount = product.price + baseFee + deliveryFee;
       const reference = `txn_${randomUUID().replace(/-/g, '')}`;
 
+      const installments = command.installments ?? 1;
+
       let transaction = await this.transactions.createPending({
         reference,
         productId: product.id,
@@ -72,6 +74,7 @@ export class CreateTransactionUseCase {
         amount,
         baseFee,
         deliveryFee,
+        installments,
       });
 
       let payment;
@@ -84,7 +87,7 @@ export class CreateTransactionUseCase {
           cardToken: command.cardToken,
           acceptanceToken: command.acceptanceToken,
           acceptPersonalAuth: command.acceptPersonalAuth,
-          installments: command.installments ?? 1,
+          installments,
           customerFullName: command.customer.name,
           customerPhone: command.customer.phone,
         });

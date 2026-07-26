@@ -55,6 +55,7 @@ describe('TransactionsController', () => {
       90900,
       3000,
       8000,
+      1,
       'APPROVED',
       'wompi-1',
     );
@@ -90,6 +91,7 @@ describe('TransactionsController', () => {
       90900,
       3000,
       8000,
+      1,
       'APPROVED',
       'wompi-1',
     );

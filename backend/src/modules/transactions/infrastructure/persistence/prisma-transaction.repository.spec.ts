@@ -39,6 +39,7 @@ describe('PrismaTransactionRepository', () => {
       amount: 90900,
       baseFee: 3000,
       deliveryFee: 8000,
+      installments: 1,
       status: 'PENDING',
       wompiId: null,
     });
@@ -59,13 +60,17 @@ describe('PrismaTransactionRepository', () => {
       amount: 90900,
       baseFee: 3000,
       deliveryFee: 8000,
+      installments: 1,
     });
 
     expect(result.status).toBe('PENDING');
+    expect(result.installments).toBe(1);
     expect(result.id).toBe('tx-1');
     expect(tx.customer.create).toHaveBeenCalled();
     expect(tx.delivery.create).toHaveBeenCalled();
-    expect(tx.transaction.create).toHaveBeenCalled();
+    expect(tx.transaction.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ installments: 1 }),
+    });
   });
 
   it('updates transaction status and wompi id', async () => {
@@ -78,6 +83,7 @@ describe('PrismaTransactionRepository', () => {
       amount: 90900,
       baseFee: 3000,
       deliveryFee: 8000,
+      installments: 1,
       status: 'APPROVED',
       wompiId: 'wompi-1',
     });
@@ -98,6 +104,7 @@ describe('PrismaTransactionRepository', () => {
       amount: 90900,
       baseFee: 3000,
       deliveryFee: 8000,
+      installments: 3,
       status: 'APPROVED',
       wompiId: 'wompi-1',
     });
@@ -105,6 +112,7 @@ describe('PrismaTransactionRepository', () => {
     const result = await repository.findById('tx-1');
 
     expect(result?.id).toBe('tx-1');
+    expect(result?.installments).toBe(3);
   });
 
   it('returns null when transaction does not exist', async () => {
