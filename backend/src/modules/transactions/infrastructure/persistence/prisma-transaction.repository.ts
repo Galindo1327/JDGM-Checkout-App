@@ -43,6 +43,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
           amount: input.amount,
           baseFee: input.baseFee,
           deliveryFee: input.deliveryFee,
+          installments: input.installments,
           status: 'PENDING',
         },
       });
@@ -81,6 +82,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
     amount: number;
     baseFee: number;
     deliveryFee: number;
+    installments: number;
     status: string;
     wompiId: string | null;
   }): Transaction {
@@ -93,6 +95,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
       row.amount,
       row.baseFee,
       row.deliveryFee,
+      row.installments,
       row.status as TransactionStatus,
       row.wompiId,
     );

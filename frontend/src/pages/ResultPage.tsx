@@ -143,6 +143,14 @@ export default function ResultPage() {
                 <Text>{formatCop(transaction.deliveryFee)}</Text>
               </div>
               <div className="result-card__line">
+                <Text type="secondary">Cuotas</Text>
+                <Text>
+                  {transaction.installments === 1
+                    ? '1 cuota'
+                    : `${transaction.installments} cuotas`}
+                </Text>
+              </div>
+              <div className="result-card__line">
                 <Text type="secondary">Total</Text>
                 <Text strong>{formatCop(transaction.amount)}</Text>
               </div>

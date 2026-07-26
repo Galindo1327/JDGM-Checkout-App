@@ -1,12 +1,13 @@
 import { Type } from 'class-transformer';
 import {
   IsEmail,
+  IsIn,
   IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
-  Max,
+  Matches,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -21,6 +22,7 @@ export class CustomerDto {
 
   @IsString()
   @IsNotEmpty()
+  @Matches(/^\d{10}$/, { message: 'El teléfono debe tener 10 dígitos' })
   phone: string;
 }
 
@@ -65,7 +67,6 @@ export class CreateTransactionDto {
 
   @IsOptional()
   @IsInt()
-  @Min(1)
-  @Max(36)
+  @IsIn([1, 3, 6, 12])
   installments?: number;
 }
