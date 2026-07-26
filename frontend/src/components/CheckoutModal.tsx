@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Alert,
   Button,
@@ -39,6 +38,7 @@ const { Text, Link, Title } = Typography;
 interface CheckoutModalProps {
   open: boolean;
   onClose: () => void;
+  onContinue: () => void;
 }
 
 interface CheckoutFormValues {
@@ -56,9 +56,12 @@ interface CheckoutFormValues {
   acceptedPersonalData: boolean;
 }
 
-export default function CheckoutModal({ open, onClose }: CheckoutModalProps) {
+export default function CheckoutModal({
+  open,
+  onClose,
+  onContinue,
+}: CheckoutModalProps) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [form] = Form.useForm<CheckoutFormValues>();
   const checkout = useAppSelector((state) => state.checkout);
   const [loadingTokens, setLoadingTokens] = useState(false);
@@ -192,8 +195,7 @@ export default function CheckoutModal({ open, onClose }: CheckoutModalProps) {
     dispatch(setAcceptedPrivacy(values.acceptedPrivacy));
     dispatch(setAcceptedPersonalData(values.acceptedPersonalData));
     dispatch(setStep('summary'));
-    onClose();
-    void navigate('/summary');
+    onContinue();
   };
 
   return (
