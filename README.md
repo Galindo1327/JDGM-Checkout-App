@@ -1,1 +1,1 @@
-# JDGM-Checkout-App
+# JDMG-Checkout-App
