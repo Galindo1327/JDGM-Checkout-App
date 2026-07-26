@@ -1,3 +1,5 @@
+import { Navigate } from 'react-router-dom';
+
 export default function CheckoutFormPage() {
-  return <h1>CheckoutFormPage</h1>;
+  return <Navigate to="/" replace />;
 }
