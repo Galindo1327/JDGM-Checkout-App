@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -17,6 +16,7 @@ import {
   ShopOutlined,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import CheckoutModal from '../components/CheckoutModal';
 import { setStep } from '../features/checkout/checkoutSlice';
 import {
   fetchProducts,
@@ -30,10 +30,11 @@ const { Title, Paragraph, Text } = Typography;
 
 export default function ProductPage() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { items, selectedProductId, loading, error } = useAppSelector(
     (state) => state.products,
   );
+  const checkoutStep = useAppSelector((state) => state.checkout.step);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const selected =
     items.find((product) => product.id === selectedProductId) ?? items[0];
@@ -42,11 +43,24 @@ export default function ProductPage() {
     void dispatch(fetchProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (checkoutStep === 'checkout') {
+      setCheckoutOpen(true);
+    }
+  }, [checkoutStep]);
+
   const handlePay = (product: Product) => {
     if (product.stock < 1) return;
     dispatch(selectProduct(product.id));
     dispatch(setStep('checkout'));
-    void navigate('/checkout');
+    setCheckoutOpen(true);
+  };
+
+  const handleCloseCheckout = () => {
+    setCheckoutOpen(false);
+    if (checkoutStep === 'checkout') {
+      dispatch(setStep('product'));
+    }
   };
 
   return (
@@ -197,6 +211,8 @@ export default function ProductPage() {
             </>
           )}
         </main>
+
+        <CheckoutModal open={checkoutOpen} onClose={handleCloseCheckout} />
       </div>
     </ConfigProvider>
   );

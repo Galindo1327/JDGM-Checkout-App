@@ -14,6 +14,10 @@ interface CheckoutState {
   card: CardData;
   acceptedPrivacy: boolean;
   acceptedPersonalData: boolean;
+  acceptanceToken: string;
+  acceptPersonalAuth: string;
+  permalinkPrivacy: string;
+  permalinkPersonalData: string;
   installments: number;
   transaction: Transaction | null;
   paying: boolean;
@@ -41,6 +45,10 @@ const initialState: CheckoutState = {
   },
   acceptedPrivacy: false,
   acceptedPersonalData: false,
+  acceptanceToken: '',
+  acceptPersonalAuth: '',
+  permalinkPrivacy: '',
+  permalinkPersonalData: '',
   installments: 1,
   transaction: null,
   paying: false,
@@ -69,6 +77,20 @@ const checkoutSlice = createSlice({
     setAcceptedPersonalData(state, action: PayloadAction<boolean>) {
       state.acceptedPersonalData = action.payload;
     },
+    setAcceptanceTokens(
+      state,
+      action: PayloadAction<{
+        acceptanceToken: string;
+        acceptPersonalAuth: string;
+        permalinkPrivacy: string;
+        permalinkPersonalData: string;
+      }>,
+    ) {
+      state.acceptanceToken = action.payload.acceptanceToken;
+      state.acceptPersonalAuth = action.payload.acceptPersonalAuth;
+      state.permalinkPrivacy = action.payload.permalinkPrivacy;
+      state.permalinkPersonalData = action.payload.permalinkPersonalData;
+    },
     setInstallments(state, action: PayloadAction<number>) {
       state.installments = action.payload;
     },
@@ -88,6 +110,10 @@ const checkoutSlice = createSlice({
       state.card = initialState.card;
       state.acceptedPrivacy = false;
       state.acceptedPersonalData = false;
+      state.acceptanceToken = '';
+      state.acceptPersonalAuth = '';
+      state.permalinkPrivacy = '';
+      state.permalinkPersonalData = '';
       state.installments = 1;
       state.transaction = null;
       state.paying = false;
@@ -103,6 +129,7 @@ export const {
   setCard,
   setAcceptedPrivacy,
   setAcceptedPersonalData,
+  setAcceptanceTokens,
   setInstallments,
   setPaying,
   setTransaction,

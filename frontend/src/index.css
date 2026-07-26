@@ -221,6 +221,248 @@ body {
   min-height: 4.2em;
 }
 
+.checkout-modal.ant-modal {
+  max-width: calc(100vw - 1rem);
+  padding-bottom: 0;
+}
+
+.checkout-modal-wrap .ant-modal-container,
+.checkout-modal .ant-modal-container,
+.checkout-modal-wrap .ant-modal .ant-modal-content,
+.checkout-modal .ant-modal-content {
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
+  border-radius: 18px !important;
+  background: #eef8e4 !important;
+  box-shadow: 0 24px 60px rgba(20, 48, 28, 0.22);
+}
+
+.checkout-modal .ant-modal-body {
+  padding: 0 !important;
+  overflow: hidden;
+  background: transparent !important;
+}
+
+.checkout-modal__shell {
+  display: flex;
+  flex-direction: column;
+  max-height: min(85vh, 720px);
+  overflow: hidden;
+  background: #eef8e4;
+}
+
+.checkout-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 56px;
+  margin: 0;
+  padding: 0.85rem 0.9rem 0.85rem 1rem;
+  background: #1f5a34;
+}
+
+.checkout-modal__header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.checkout-modal__header-icon {
+  flex-shrink: 0;
+  font-size: 1.15rem;
+  color: #e8ffd8;
+}
+
+.checkout-modal__header-title {
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.checkout-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+}
+
+.checkout-modal__close .anticon {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  stroke-width: 2;
+}
+
+.checkout-modal__close:hover {
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.checkout-modal__body {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 1rem 1rem 1.15rem;
+  background: #fafff5;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #8fbf8a transparent;
+}
+
+.checkout-modal__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.checkout-modal__body::-webkit-scrollbar-track {
+  margin: 8px 0;
+  background: transparent;
+}
+
+.checkout-modal__body::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #8fbf8a;
+  background-clip: content-box;
+}
+
+.checkout-modal__form {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding-right: 0.45rem;
+  padding-left: 0.45rem;
+}
+
+.checkout-modal__form .ant-row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  row-gap: 0;
+}
+
+.checkout-modal__form .ant-col {
+  max-width: 100%;
+}
+
+.checkout-modal__form .ant-input,
+.checkout-modal__form .ant-input-affix-wrapper,
+.checkout-modal__form .ant-input-outlined,
+.checkout-modal__form .ant-select-selector,
+.checkout-modal__form .ant-select-outlined .ant-select-selector,
+.checkout-modal__form .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.checkout-modal-wrap .checkout-modal__select .ant-select-selector {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.checkout-modal__form .ant-select-focused .ant-select-selector,
+.checkout-modal__form .ant-select-open .ant-select-selector {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.checkout-modal__select.ant-select .ant-select-selector {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.checkout-modal__form .ant-typography {
+  color: #21452c;
+}
+
+.checkout-modal__loading {
+  display: grid;
+  place-items: center;
+  min-height: 80px;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-modal__brand {
+  width: 42px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.checkout-modal__brand-placeholder {
+  display: inline-block;
+  width: 42px;
+  height: 28px;
+}
+
+.checkout-modal__policies {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.checkout-modal__policy-link {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+.checkout-modal__policy-link:hover {
+  text-decoration: underline !important;
+}
+
+.checkout-modal__hint {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-modal__submit.ant-btn {
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+  height: 46px;
+  font-weight: 600;
+  background: #1f5a34;
+  border-color: #1f5a34;
+}
+
+.checkout-modal__submit.ant-btn:hover:not(:disabled) {
+  background: #174828 !important;
+  border-color: #174828 !important;
+}
+
+.checkout-modal__submit.ant-btn:disabled,
+.checkout-modal__submit.ant-btn.ant-btn-disabled {
+  color: #8a8f8c !important;
+  background: #d5dbd6 !important;
+  border-color: #d5dbd6 !important;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+@media (max-width: 575px) {
+  .checkout-modal.ant-modal {
+    max-width: calc(100vw - 0.75rem);
+    margin: 0.5rem auto;
+  }
+
+  .checkout-modal__header {
+    min-height: 52px;
+    padding: 0.75rem 0.8rem 0.75rem 0.85rem;
+  }
+
+  .checkout-modal__body {
+    padding: 0.9rem 0.85rem 1rem;
+  }
+
+  .checkout-modal__form {
+    padding-right: 0.35rem;
+  }
+}
+
 @media (min-width: 768px) {
   .store-header.ant-layout-header {
     padding: 0 1.5rem;
@@ -241,5 +483,13 @@ body {
 
   .product-page__grid {
     grid-template-columns: repeat(2, minmax(0, 220px));
+  }
+
+  .checkout-modal__body {
+    padding: 1.15rem;
+  }
+
+  .checkout-modal__form {
+    padding-right: 0.55rem;
   }
 }
