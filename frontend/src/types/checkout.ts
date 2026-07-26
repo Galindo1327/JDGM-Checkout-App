@@ -35,6 +35,7 @@ export interface Transaction {
   amount: number;
   baseFee: number;
   deliveryFee: number;
+  installments: number;
   status: string;
   wompiId: string | null;
 }

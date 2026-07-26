@@ -90,6 +90,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'PENDING',
       null,
     );
@@ -102,6 +103,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'APPROVED',
       'wompi-1',
     );
@@ -140,6 +142,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'PENDING',
       null,
     );
@@ -152,6 +155,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'DECLINED',
       'wompi-2',
     );
@@ -181,6 +185,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'PENDING',
       null,
     );
@@ -193,6 +198,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'ERROR',
       null,
     );
@@ -222,6 +228,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'PENDING',
       null,
     );
@@ -234,6 +241,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'PENDING',
       'wompi-3',
     );
@@ -246,6 +254,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'APPROVED',
       'wompi-3',
     );
@@ -282,6 +291,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'PENDING',
       null,
     );
@@ -294,6 +304,7 @@ describe('CreateTransactionUseCase', () => {
       90900,
       BASE_FEE,
       8000,
+      1,
       'VOIDED',
       'wompi-5',
     );
@@ -369,6 +380,7 @@ describe('CreateTransactionUseCase', () => {
       expect.objectContaining({
         deliveryFee: DEFAULT_DELIVERY_FEE,
         amount: product.price + BASE_FEE + DEFAULT_DELIVERY_FEE,
+        installments: 1,
       }),
     );
   });

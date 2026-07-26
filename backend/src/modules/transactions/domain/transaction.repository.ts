@@ -16,6 +16,7 @@ export interface CreatePendingTransactionInput {
   amount: number;
   baseFee: number;
   deliveryFee: number;
+  installments: number;
 }
 
 export interface TransactionRepository {

@@ -47,11 +47,12 @@ model Transaction {
   customer    Customer @relation(fields: [customerId], references: [id])
   deliveryId  String
   delivery    Delivery @relation(fields: [deliveryId], references: [id])
-  amount      Int
-  baseFee     Int
-  deliveryFee Int
-  status      String
-  wompiId     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  amount       Int
+  baseFee      Int
+  deliveryFee  Int
+  installments Int      @default(1)
+  status       String
+  wompiId      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

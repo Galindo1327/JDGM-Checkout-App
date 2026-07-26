@@ -23,6 +23,7 @@ import {
   setCard,
   setCustomer,
   setDelivery,
+  setInstallments,
   setStep,
 } from '../features/checkout/checkoutSlice';
 import { getAcceptanceTokens } from '../services/wompi';
@@ -47,6 +48,7 @@ interface CheckoutFormValues {
   expMonth: string;
   expYear: string;
   cvc: string;
+  installments: number;
   name: string;
   email: string;
   phone: string;
@@ -94,9 +96,10 @@ export default function CheckoutModal({
     if (cardBrand === 'unknown') return false;
     if (!watchedValues.expMonth || !watchedValues.expYear) return false;
     if (!/^\d{3,4}$/.test(cvc)) return false;
+    if (![1, 3, 6, 12].includes(Number(watchedValues.installments))) return false;
     if (!name) return false;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
-    if (!/^\d{7,15}$/.test(phone)) return false;
+    if (!/^\d{10}$/.test(phone)) return false;
     if (!address || !city) return false;
     if (!watchedValues.acceptedPrivacy || !watchedValues.acceptedPersonalData) {
       return false;
@@ -130,6 +133,7 @@ export default function CheckoutModal({
       expMonth: checkout.card.expMonth,
       expYear: checkout.card.expYear,
       cvc: checkout.card.cvc,
+      installments: checkout.installments || 1,
       name: checkout.customer.name,
       email: checkout.customer.email,
       phone: checkout.customer.phone,
@@ -194,6 +198,7 @@ export default function CheckoutModal({
     );
     dispatch(setAcceptedPrivacy(values.acceptedPrivacy));
     dispatch(setAcceptedPersonalData(values.acceptedPersonalData));
+    dispatch(setInstallments(Number(values.installments)));
     dispatch(setStep('summary'));
     onContinue();
   };
@@ -400,6 +405,21 @@ export default function CheckoutModal({
           </Col>
         </Row>
 
+        <Form.Item
+          label="Cuotas"
+          name="installments"
+          rules={[{ required: true, message: 'Selecciona las cuotas' }]}
+        >
+          <Select
+            options={[
+              { value: 1, label: '1 cuota' },
+              { value: 3, label: '3 cuotas' },
+              { value: 6, label: '6 cuotas' },
+              { value: 12, label: '12 cuotas' },
+            ]}
+          />
+        </Form.Item>
+
         <Title level={3}>Datos de entrega</Title>
 
         <Form.Item
@@ -427,15 +447,19 @@ export default function CheckoutModal({
           rules={[
             { required: true, message: 'Ingresa tu teléfono' },
             {
-              pattern: /^\d{7,15}$/,
-              message: 'Teléfono inválido',
+              pattern: /^\d{10}$/,
+              message: 'El teléfono debe tener 10 dígitos',
             },
           ]}
           getValueFromEvent={(event: ChangeEvent<HTMLInputElement>) =>
-            onlyDigits(event.target.value).slice(0, 15)
+            onlyDigits(event.target.value).slice(0, 10)
           }
         >
-          <Input placeholder="3001234567" inputMode="tel" />
+          <Input
+            placeholder="3001234567"
+            inputMode="tel"
+            maxLength={10}
+          />
         </Form.Item>
 
         <Form.Item
