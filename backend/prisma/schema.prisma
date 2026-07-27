@@ -52,7 +52,7 @@ model Transaction {
   deliveryFee  Int
   installments Int      @default(1)
   status       String
-  wompiId      String?
+  providerPaymentId String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

@@ -17,6 +17,6 @@ export class Transaction {
     public readonly deliveryFee: number,
     public readonly installments: number,
     public readonly status: TransactionStatus,
-    public readonly wompiId: string | null,
+    public readonly providerPaymentId: string | null,
   ) {}
 }

@@ -24,7 +24,7 @@ export interface TransactionRepository {
   updateStatus(
     id: string,
     status: TransactionStatus,
-    wompiId?: string,
+    providerPaymentId?: string,
   ): Promise<Transaction>;
   findById(id: string): Promise<Transaction | null>;
 }

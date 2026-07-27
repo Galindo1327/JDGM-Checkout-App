@@ -68,7 +68,7 @@ describe('api service', () => {
       deliveryFee: 8000,
       installments: 3,
       status: 'APPROVED',
-      wompiId: 'wompi-1',
+      providerPaymentId: 'pay-1',
     };
     post.mockResolvedValue({ data: transaction });
 
@@ -88,7 +88,7 @@ describe('api service', () => {
       deliveryFee: 8000,
       installments: 1,
       status: 'DECLINED',
-      wompiId: null,
+      providerPaymentId: null,
     };
     get.mockResolvedValue({ data: transaction });
 

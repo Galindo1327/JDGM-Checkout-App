@@ -49,7 +49,7 @@ const baseTransaction: Transaction = {
   deliveryFee: 8000,
   installments: 3,
   status: 'APPROVED',
-  wompiId: 'wompi-1',
+  providerPaymentId: 'pay-1',
 };
 
 function renderResult(transaction: Transaction | null) {

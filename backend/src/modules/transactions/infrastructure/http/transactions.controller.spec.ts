@@ -57,7 +57,7 @@ describe('TransactionsController', () => {
       8000,
       1,
       'APPROVED',
-      'wompi-1',
+      'pay-1',
     );
     useCase.execute.mockResolvedValue(ok(transaction));
 
@@ -93,7 +93,7 @@ describe('TransactionsController', () => {
       8000,
       1,
       'APPROVED',
-      'wompi-1',
+      'pay-1',
     );
     transactions.findById.mockResolvedValue(transaction);
 

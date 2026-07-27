@@ -105,13 +105,13 @@ describe('CreateTransactionUseCase', () => {
       8000,
       1,
       'APPROVED',
-      'wompi-1',
+      'pay-1',
     );
 
     products.findById.mockResolvedValue(product);
     transactions.createPending.mockResolvedValue(pending);
     paymentGateway.createTransaction.mockResolvedValue({
-      id: 'wompi-1',
+      id: 'pay-1',
       status: 'APPROVED',
     });
     transactions.updateStatus.mockResolvedValue(approved);
@@ -157,13 +157,13 @@ describe('CreateTransactionUseCase', () => {
       8000,
       1,
       'DECLINED',
-      'wompi-2',
+      'pay-2',
     );
 
     products.findById.mockResolvedValue(product);
     transactions.createPending.mockResolvedValue(pending);
     paymentGateway.createTransaction.mockResolvedValue({
-      id: 'wompi-2',
+      id: 'pay-2',
       status: 'DECLINED',
     });
     transactions.updateStatus.mockResolvedValue(declined);
@@ -175,7 +175,7 @@ describe('CreateTransactionUseCase', () => {
     expect(products.decrementStock).not.toHaveBeenCalled();
   });
 
-  it('marks transaction as ERROR when Wompi create fails', async () => {
+  it('marks transaction as ERROR when provider create fails', async () => {
     const pending = new Transaction(
       'tx-1',
       'txn_ref',
@@ -218,7 +218,7 @@ describe('CreateTransactionUseCase', () => {
     expect(products.decrementStock).not.toHaveBeenCalled();
   });
 
-  it('polls Wompi when initial status is PENDING', async () => {
+  it('polls provider when initial status is PENDING', async () => {
     const pending = new Transaction(
       'tx-1',
       'txn_ref',
@@ -243,7 +243,7 @@ describe('CreateTransactionUseCase', () => {
       8000,
       1,
       'PENDING',
-      'wompi-3',
+      'pay-3',
     );
     const approved = new Transaction(
       'tx-1',
@@ -256,20 +256,20 @@ describe('CreateTransactionUseCase', () => {
       8000,
       1,
       'APPROVED',
-      'wompi-3',
+      'pay-3',
     );
 
     products.findById.mockResolvedValue(product);
     transactions.createPending.mockResolvedValue(pending);
     paymentGateway.createTransaction.mockResolvedValue({
-      id: 'wompi-3',
+      id: 'pay-3',
       status: 'PENDING',
     });
     transactions.updateStatus
       .mockResolvedValueOnce(stillPending)
       .mockResolvedValueOnce(approved);
     paymentGateway.getTransaction.mockResolvedValue({
-      id: 'wompi-3',
+      id: 'pay-3',
       status: 'APPROVED',
     });
     products.decrementStock.mockResolvedValue();
@@ -277,7 +277,7 @@ describe('CreateTransactionUseCase', () => {
     const result = await useCase.execute(command);
 
     expect(result.isOk()).toBe(true);
-    expect(paymentGateway.getTransaction).toHaveBeenCalledWith('wompi-3');
+    expect(paymentGateway.getTransaction).toHaveBeenCalledWith('pay-3');
     expect(products.decrementStock).toHaveBeenCalledWith('product-1', 1);
   });
 
@@ -306,13 +306,13 @@ describe('CreateTransactionUseCase', () => {
       8000,
       1,
       'VOIDED',
-      'wompi-5',
+      'pay-5',
     );
 
     products.findById.mockResolvedValue(product);
     transactions.createPending.mockResolvedValue(pending);
     paymentGateway.createTransaction.mockResolvedValue({
-      id: 'wompi-5',
+      id: 'pay-5',
       status: 'VOIDED',
     });
     transactions.updateStatus.mockResolvedValue(voided);
@@ -360,13 +360,13 @@ describe('CreateTransactionUseCase', () => {
       DEFAULT_DELIVERY_FEE,
       1,
       'APPROVED',
-      'wompi-4',
+      'pay-4',
     );
 
     products.findById.mockResolvedValue(product);
     transactions.createPending.mockResolvedValue(pending);
     paymentGateway.createTransaction.mockResolvedValue({
-      id: 'wompi-4',
+      id: 'pay-4',
       status: 'APPROVED',
     });
     transactions.updateStatus.mockResolvedValue(approved);

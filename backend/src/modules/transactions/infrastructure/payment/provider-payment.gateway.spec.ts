@@ -1,11 +1,11 @@
 import { createHash } from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import { WompiPaymentGateway } from './wompi-payment.gateway';
+import { ProviderPaymentGateway } from './provider-payment.gateway';
 
 jest.mock('axios');
 
-describe('WompiPaymentGateway', () => {
+describe('ProviderPaymentGateway', () => {
   const mockedAxios = axios as jest.Mocked<typeof axios>;
   const http = {
     post: jest.fn(),
@@ -15,16 +15,16 @@ describe('WompiPaymentGateway', () => {
   const config = {
     getOrThrow: jest.fn((key: string) => {
       const values: Record<string, string> = {
-        WOMPI_SANDBOX_URL: 'https://api-sandbox.test/v1',
-        WOMPI_PRIVATE_KEY: 'prv_test',
-        WOMPI_PUBLIC_KEY: 'pub_test',
-        WOMPI_INTEGRITY_KEY: 'integrity_test',
+        PAYMENT_PROVIDER_API_URL: 'https://api-sandbox.test/v1',
+        PAYMENT_PROVIDER_PRIVATE_KEY: 'prv_test',
+        PAYMENT_PROVIDER_PUBLIC_KEY: 'pub_test',
+        PAYMENT_PROVIDER_INTEGRITY_KEY: 'integrity_test',
       };
       return values[key];
     }),
   };
 
-  let gateway: WompiPaymentGateway;
+  let gateway: ProviderPaymentGateway;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -38,14 +38,14 @@ describe('WompiPaymentGateway', () => {
             (payload as { isAxiosError?: boolean }).isAxiosError,
         ),
     );
-    gateway = new WompiPaymentGateway(config as unknown as ConfigService);
+    gateway = new ProviderPaymentGateway(config as unknown as ConfigService);
   });
 
   it('creates a transaction with integrity signature', async () => {
     http.post.mockResolvedValue({
       data: {
         data: {
-          id: 'wompi-1',
+          id: 'pay-1',
           status: 'APPROVED',
           status_message: 'ok',
         },
@@ -73,7 +73,7 @@ describe('WompiPaymentGateway', () => {
       .digest('hex');
 
     expect(result).toEqual({
-      id: 'wompi-1',
+      id: 'pay-1',
       status: 'APPROVED',
       statusMessage: 'ok',
     });
@@ -100,21 +100,21 @@ describe('WompiPaymentGateway', () => {
     http.get.mockResolvedValue({
       data: {
         data: {
-          id: 'wompi-1',
+          id: 'pay-1',
           status: 'DECLINED',
           status_message: 'rejected',
         },
       },
     });
 
-    const result = await gateway.getTransaction('wompi-1');
+    const result = await gateway.getTransaction('pay-1');
 
     expect(result).toEqual({
-      id: 'wompi-1',
+      id: 'pay-1',
       status: 'DECLINED',
       statusMessage: 'rejected',
     });
-    expect(http.get).toHaveBeenCalledWith('/transactions/wompi-1', {
+    expect(http.get).toHaveBeenCalledWith('/transactions/pay-1', {
       headers: { Authorization: 'Bearer pub_test' },
     });
   });
@@ -135,14 +135,16 @@ describe('WompiPaymentGateway', () => {
         customerFullName: 'A',
         customerPhone: '1',
       }),
-    ).rejects.toThrow('Respuesta inválida de Wompi al crear la transacción');
+    ).rejects.toThrow(
+      'Respuesta inválida del proveedor de pagos al crear la transacción',
+    );
   });
 
   it('throws when get response is invalid', async () => {
     http.get.mockResolvedValue({ data: {} });
 
-    await expect(gateway.getTransaction('wompi-1')).rejects.toThrow(
-      'Respuesta inválida de Wompi al consultar la transacción',
+    await expect(gateway.getTransaction('pay-1')).rejects.toThrow(
+      'Respuesta inválida del proveedor de pagos al consultar la transacción',
     );
   });
 
@@ -157,10 +159,10 @@ describe('WompiPaymentGateway', () => {
       },
     });
 
-    await expect(gateway.getTransaction('wompi-1')).rejects.toThrow('timeout');
+    await expect(gateway.getTransaction('pay-1')).rejects.toThrow('timeout');
 
     http.get.mockRejectedValue(new Error('fallo local'));
-    await expect(gateway.getTransaction('wompi-1')).rejects.toThrow(
+    await expect(gateway.getTransaction('pay-1')).rejects.toThrow(
       'fallo local',
     );
   });

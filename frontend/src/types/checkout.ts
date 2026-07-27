@@ -37,7 +37,7 @@ export interface Transaction {
   deliveryFee: number;
   installments: number;
   status: string;
-  wompiId: string | null;
+  providerPaymentId: string | null;
 }
 
 export interface CreateTransactionPayload {
