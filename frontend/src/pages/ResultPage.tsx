@@ -12,6 +12,7 @@ import {
   ExclamationCircleFilled,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import StoreFooter from '../components/StoreFooter';
 import StoreHeader from '../components/StoreHeader';
 import { resetCheckout } from '../features/checkout/checkoutSlice';
 import { fetchProducts } from '../features/products/productSlice';
@@ -167,6 +168,8 @@ export default function ResultPage() {
             </Button>
           </article>
         </main>
+
+        <StoreFooter />
       </div>
     </ConfigProvider>
   );
