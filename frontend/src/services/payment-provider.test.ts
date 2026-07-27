@@ -11,9 +11,9 @@ vi.mock('axios', () => ({
   },
 }));
 
-import { getAcceptanceTokens, tokenizeCard } from './wompi';
+import { getAcceptanceTokens, tokenizeCard } from './payment-provider';
 
-describe('wompi service', () => {
+describe('payment-provider service', () => {
   beforeEach(() => {
     get.mockReset();
     post.mockReset();

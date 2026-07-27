@@ -39,7 +39,7 @@ script:post-response {
 
 docs {
   # POST /transactions
-  Crea customer + delivery + transacción, cobra en Wompi sandbox y hace polling del resultado.
+  Crea customer + delivery + transacción, cobra en sandbox del proveedor y hace polling del resultado.
 
   ## Body
   | Campo | Tipo | Obligatorio | Notas |
@@ -51,7 +51,7 @@ docs {
   | delivery.address | string | sí | |
   | delivery.city | string | sí | |
   | delivery.fee | number | no | fee de envío |
-  | cardToken | string | sí | token de tarjeta Wompi |
+  | cardToken | string | sí | token de tarjeta del proveedor |
   | acceptanceToken | string | sí | de `GET merchants/{publicKey}` |
   | acceptPersonalAuth | string | sí | de `GET merchants/{publicKey}` |
   | installments | 1\|3\|6\|12 | no | default 1 |
@@ -59,7 +59,7 @@ docs {
   ## Cómo llenar los tokens (sandbox)
   1. Abre el front y completa el checkout hasta pagar, o
   2. En Bruno Environments pega:
-     - `cardToken` (tokenización Wompi)
+     - `cardToken` (tokenización del proveedor)
      - `acceptanceToken`
      - `acceptPersonalAuth`
 
@@ -76,7 +76,7 @@ docs {
     "deliveryFee": 5000,
     "installments": 1,
     "status": "APPROVED",
-    "wompiId": "..."
+    "providerPaymentId": "..."
   }
   ```
 

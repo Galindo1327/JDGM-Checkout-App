@@ -9,17 +9,23 @@ import type {
 } from '../../domain/payment-gateway';
 
 @Injectable()
-export class WompiPaymentGateway implements PaymentGateway {
+export class ProviderPaymentGateway implements PaymentGateway {
   private readonly http: AxiosInstance;
   private readonly privateKey: string;
   private readonly publicKey: string;
   private readonly integrityKey: string;
 
   constructor(private readonly config: ConfigService) {
-    const baseURL = this.config.getOrThrow<string>('WOMPI_SANDBOX_URL');
-    this.privateKey = this.config.getOrThrow<string>('WOMPI_PRIVATE_KEY');
-    this.publicKey = this.config.getOrThrow<string>('WOMPI_PUBLIC_KEY');
-    this.integrityKey = this.config.getOrThrow<string>('WOMPI_INTEGRITY_KEY');
+    const baseURL = this.config.getOrThrow<string>('PAYMENT_PROVIDER_API_URL');
+    this.privateKey = this.config.getOrThrow<string>(
+      'PAYMENT_PROVIDER_PRIVATE_KEY',
+    );
+    this.publicKey = this.config.getOrThrow<string>(
+      'PAYMENT_PROVIDER_PUBLIC_KEY',
+    );
+    this.integrityKey = this.config.getOrThrow<string>(
+      'PAYMENT_PROVIDER_INTEGRITY_KEY',
+    );
 
     this.http = axios.create({
       baseURL,
@@ -62,7 +68,9 @@ export class WompiPaymentGateway implements PaymentGateway {
 
       const data = response.data?.data;
       if (!data?.id) {
-        throw new Error('Respuesta inválida de Wompi al crear la transacción');
+        throw new Error(
+          'Respuesta inválida del proveedor de pagos al crear la transacción',
+        );
       }
 
       return {
@@ -84,7 +92,7 @@ export class WompiPaymentGateway implements PaymentGateway {
       const data = response.data?.data;
       if (!data?.id) {
         throw new Error(
-          'Respuesta inválida de Wompi al consultar la transacción',
+          'Respuesta inválida del proveedor de pagos al consultar la transacción',
         );
       }
 
@@ -115,7 +123,7 @@ export class WompiPaymentGateway implements PaymentGateway {
       return error.message;
     }
     if (error instanceof Error) return error.message;
-    return 'Error desconocido al comunicarse con Wompi';
+    return 'Error desconocido al comunicarse con el proveedor de pagos';
   }
 
   private buildIntegritySignature(

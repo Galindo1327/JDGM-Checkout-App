@@ -4,7 +4,7 @@ import { CreateTransactionUseCase } from './application/create-transaction.useca
 import { PAYMENT_GATEWAY } from './domain/payment-gateway';
 import { TRANSACTION_REPOSITORY } from './domain/transaction.repository';
 import { TransactionsController } from './infrastructure/http/transactions.controller';
-import { WompiPaymentGateway } from './infrastructure/payment/wompi-payment.gateway';
+import { ProviderPaymentGateway } from './infrastructure/payment/provider-payment.gateway';
 import { PrismaTransactionRepository } from './infrastructure/persistence/prisma-transaction.repository';
 
 @Module({
@@ -18,7 +18,7 @@ import { PrismaTransactionRepository } from './infrastructure/persistence/prisma
     },
     {
       provide: PAYMENT_GATEWAY,
-      useClass: WompiPaymentGateway,
+      useClass: ProviderPaymentGateway,
     },
   ],
 })

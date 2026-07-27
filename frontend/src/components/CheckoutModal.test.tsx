@@ -5,11 +5,11 @@ import { Provider } from 'react-redux';
 import CheckoutModal from './CheckoutModal';
 import { createTestStore } from '../test/test-store';
 
-vi.mock('../services/wompi', () => ({
+vi.mock('../services/payment-provider', () => ({
   getAcceptanceTokens: vi.fn(),
 }));
 
-import { getAcceptanceTokens } from '../services/wompi';
+import { getAcceptanceTokens } from '../services/payment-provider';
 
 const mockedTokens = vi.mocked(getAcceptanceTokens);
 

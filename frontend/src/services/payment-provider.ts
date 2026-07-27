@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const wompi = axios.create({
-  baseURL: import.meta.env.VITE_WOMPI_SANDBOX_URL,
+const paymentProvider = axios.create({
+  baseURL: import.meta.env.VITE_PAYMENT_PROVIDER_API_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 
-const publicKey = import.meta.env.VITE_WOMPI_PUBLIC_KEY as string;
+const publicKey = import.meta.env.VITE_PAYMENT_PROVIDER_PUBLIC_KEY as string;
 
 export interface AcceptanceTokens {
   acceptanceToken: string;
@@ -23,7 +23,7 @@ export interface CardTokenInput {
 }
 
 export async function getAcceptanceTokens(): Promise<AcceptanceTokens> {
-  const { data } = await wompi.get(`/merchants/${publicKey}`);
+  const { data } = await paymentProvider.get(`/merchants/${publicKey}`);
   const merchant = data.data;
 
   return {
@@ -35,7 +35,7 @@ export async function getAcceptanceTokens(): Promise<AcceptanceTokens> {
 }
 
 export async function tokenizeCard(input: CardTokenInput): Promise<string> {
-  const { data } = await wompi.post(
+  const { data } = await paymentProvider.post(
     '/tokens/cards',
     {
       number: input.number.replace(/\s+/g, ''),

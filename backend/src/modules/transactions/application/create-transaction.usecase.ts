@@ -93,7 +93,7 @@ export class CreateTransactionUseCase {
         });
       } catch (e) {
         const message =
-          e instanceof Error ? e.message : 'Error al crear pago en Wompi';
+          e instanceof Error ? e.message : 'Error al crear pago con el proveedor';
         transaction = await this.transactions.updateStatus(
           transaction.id,
           'ERROR',
@@ -128,15 +128,15 @@ export class CreateTransactionUseCase {
     }
   }
 
-  private async pollPayment(wompiId: string) {
-    let last = await this.paymentGateway.getTransaction(wompiId);
+  private async pollPayment(providerPaymentId: string) {
+    let last = await this.paymentGateway.getTransaction(providerPaymentId);
 
     for (let i = 0; i < POLL_ATTEMPTS; i++) {
       if (FINAL_STATUSES.has(last.status)) {
         return last;
       }
       await this.delay(POLL_DELAY_MS);
-      last = await this.paymentGateway.getTransaction(wompiId);
+      last = await this.paymentGateway.getTransaction(providerPaymentId);
     }
 
     return last;
