@@ -345,6 +345,7 @@ describe('CreateTransactionUseCase', () => {
       product.price + BASE_FEE + DEFAULT_DELIVERY_FEE,
       BASE_FEE,
       DEFAULT_DELIVERY_FEE,
+      1,
       'PENDING',
       null,
     );
@@ -357,6 +358,7 @@ describe('CreateTransactionUseCase', () => {
       product.price + BASE_FEE + DEFAULT_DELIVERY_FEE,
       BASE_FEE,
       DEFAULT_DELIVERY_FEE,
+      1,
       'APPROVED',
       'wompi-4',
     );
