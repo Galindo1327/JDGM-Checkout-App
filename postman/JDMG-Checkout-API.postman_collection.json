@@ -1,0 +1,122 @@
+{
+  "info": {
+    "_postman_id": "jdmg-checkout-api-collection",
+    "name": "JDMG Checkout API",
+    "description": "Colección del checkout JDMG.\n\n## Cómo importar\n1. Abre Postman\n2. Import → Upload Files\n3. Selecciona este JSON\n4. Elige el environment Local o Production\n\n## Flujo sugerido\n1. GET Products (guarda productId)\n2. Completa cardToken / acceptanceToken / acceptPersonalAuth en el environment\n3. POST Create Transaction\n4. GET Transaction by ID\n\nLos tokens de sandbox se obtienen desde el front (Network) o tokenizando con la llave pública.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/",
+            "description": "Health check del backend NestJS."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "GET Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const products = pm.response.json();",
+                  "if (Array.isArray(products) && products.length > 0) {",
+                  "  pm.environment.set('productId', products[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/products",
+            "description": "Lista productos. Guarda el primer `id` en `productId`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "POST Create Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body && body.id) {",
+                  "  pm.environment.set('transactionId', body.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"customer\": {\n    \"name\": \"Juan Perez\",\n    \"email\": \"juan@example.com\",\n    \"phone\": \"3001234567\"\n  },\n  \"delivery\": {\n    \"address\": \"Calle 123 #45-67\",\n    \"city\": \"Bogota\",\n    \"fee\": 5000\n  },\n  \"cardToken\": \"{{cardToken}}\",\n  \"acceptanceToken\": \"{{acceptanceToken}}\",\n  \"acceptPersonalAuth\": \"{{acceptPersonalAuth}}\",\n  \"installments\": 1\n}"
+            },
+            "url": "{{baseUrl}}/transactions",
+            "description": "Crea y procesa el pago.\n\nVariables requeridas en el environment:\n- productId\n- cardToken\n- acceptanceToken\n- acceptPersonalAuth\n\ninstallments opcionales: 1 | 3 | 6 | 12"
+          },
+          "response": []
+        },
+        {
+          "name": "GET Transaction by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/transactions/{{transactionId}}",
+            "description": "Consulta una transacción por id. Usa `transactionId` del POST anterior."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://d331q1et3v146i.cloudfront.net"
+    }
+  ]
+}

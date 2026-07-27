@@ -1,0 +1,39 @@
+meta {
+  name: GET Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/products
+  body: none
+  auth: none
+}
+
+script:post-response {
+  const products = res.getBody();
+  if (Array.isArray(products) && products.length > 0) {
+    bru.setEnvVar("productId", products[0].id);
+  }
+}
+
+docs {
+  # GET /products
+  Lista el catálogo de productos.
+
+  ## Response 200
+  ```json
+  [
+    {
+      "id": "uuid",
+      "name": "Camisa Oversize",
+      "description": "...",
+      "price": 89000,
+      "stock": 10
+    }
+  ]
+  ```
+
+  Al ejecutarlo, guarda el primer `id` en la variable de environment `productId`
+  para usarlo en `POST /transactions`.
+}

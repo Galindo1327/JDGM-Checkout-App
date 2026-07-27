@@ -1,0 +1,24 @@
+meta {
+  name: GET Transaction by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/transactions/{{transactionId}}
+  body: none
+  auth: none
+}
+
+docs {
+  # GET /transactions/:id
+  Consulta el estado de una transacción ya creada.
+
+  Usa la variable `transactionId` (se llena sola tras `POST Create Transaction`).
+
+  ## Response 200
+  Mismo shape que el create.
+
+  ## Errors
+  - `404` — `Transacción no encontrada`
+}
