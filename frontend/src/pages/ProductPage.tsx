@@ -26,20 +26,10 @@ import {
   fetchProducts,
   selectProduct,
 } from '../features/products/productSlice';
-import { formatCop, getProductImage } from '../utils/product';
+import { formatCop, getAvailabilityTag, getProductImage } from '../utils/product';
 import type { Product } from '../types/checkout';
 
 const { Title, Paragraph, Text } = Typography;
-
-function getAvailabilityTag(stock: number) {
-  if (stock < 1) {
-    return { label: 'Agotado', color: 'error' as const };
-  }
-  if (stock < 10) {
-    return { label: 'Casi Agotado', color: 'warning' as const };
-  }
-  return { label: 'Disponible', color: 'success' as const };
-}
 
 export default function ProductPage() {
   const dispatch = useAppDispatch();
