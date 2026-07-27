@@ -21,7 +21,7 @@ Aplicación fullstack de checkout para comprar un producto con tarjeta de crédi
 | Backend | NestJS + TypeScript, arquitectura hexagonal (Ports & Adapters), ROP con `neverthrow` |
 | Base de datos | PostgreSQL (Neon) + Prisma |
 | Tests | Backend: Jest (>80%). Frontend: Vitest + Testing Library (>80%) |
-| Deploy | Frontend: S3 + CloudFront. API: Docker en Elastic Beanstalk + CloudFront HTTPS |
+| Deploy | Frontend: S3 + CloudFront. API: Docker en Elastic Beanstalk + CloudFront HTTPS. CI/CD: GitHub Actions desde `main` |
 | Seguridad | Helmet, CORS explícito, ValidationPipe, rate limiting (Throttler), tokens de tarjeta solo en cliente |
 
 ## Flujo de negocio (5 pasos)
@@ -160,7 +160,7 @@ Importa desde el repo (gratis, sin workspace de pago):
 - Environment Local: [`postman/Local.postman_environment.json`](./postman/Local.postman_environment.json)
 - Environment Production: [`postman/Production.postman_environment.json`](./postman/Production.postman_environment.json)
 
-Carpeta: https://github.com/Galindo1327/JDMG-Checkout-App/tree/test/postman
+Carpeta: https://github.com/Galindo1327/JDMG-Checkout-App/tree/main/postman
 
 También hay una colección Bruno en [`bruno/`](./bruno/) (opcional).
 
@@ -249,6 +249,20 @@ App: `http://localhost:5173`
 - **API:** imagen Docker → Elastic Beanstalk (Amazon Linux 2023) → CloudFront delante para HTTPS hacia el SPA.
 - **DB:** PostgreSQL gestionado (Neon).
 - CORS de producción apunta al origen CloudFront del front.
+- **CI/CD:** GitHub Actions despliega automáticamente desde la rama **`main`**.
+
+### GitHub Actions (rama `main`)
+
+| Workflow | Cuándo corre | Qué hace |
+|----------|--------------|----------|
+| [`deploy-frontend.yml`](./.github/workflows/deploy-frontend.yml) | Push a `main` con cambios en `frontend/**` (o manual) | `npm run build` → sync S3 → invalidación CloudFront |
+| [`deploy-backend.yml`](./.github/workflows/deploy-backend.yml) | Push a `main` con cambios en `backend/**` (o manual) | Empaqueta Docker → Elastic Beanstalk |
+
+Secrets del repo (Settings → Secrets and variables → Actions) ya configurados para este proyecto:
+
+`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_WOMPI_PUBLIC_KEY`, `VITE_WOMPI_SANDBOX_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`.
+
+Flujo de trabajo recomendado: desarrollar en feature/`test` → PR a `main` → merge → deploy automático.
 
 ## Seguridad (bonus)
 
@@ -264,10 +278,11 @@ App: `http://localhost:5173`
 
 ```
 JDMG-Checkout-App/
-├── backend/          # NestJS API
-├── frontend/         # React SPA
-├── postman/          # Colección + environments Postman
-├── bruno/            # Colección Bruno (opcional)
+├── .github/workflows/  # CI/CD (deploy front + API desde main)
+├── backend/            # NestJS API
+├── frontend/           # React SPA
+├── postman/            # Colección + environments Postman
+├── bruno/              # Colección Bruno (opcional)
 └── README.md
 ```
 
