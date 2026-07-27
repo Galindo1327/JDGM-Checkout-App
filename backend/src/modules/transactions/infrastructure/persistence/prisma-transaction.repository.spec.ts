@@ -41,7 +41,7 @@ describe('PrismaTransactionRepository', () => {
       deliveryFee: 8000,
       installments: 1,
       status: 'PENDING',
-      wompiId: null,
+      providerPaymentId: null,
     });
 
     const result = await repository.createPending({
@@ -73,7 +73,7 @@ describe('PrismaTransactionRepository', () => {
     });
   });
 
-  it('updates transaction status and wompi id', async () => {
+  it('updates transaction status and provider payment id', async () => {
     prisma.transaction.update.mockResolvedValue({
       id: 'tx-1',
       reference: 'txn_ref',
@@ -85,13 +85,13 @@ describe('PrismaTransactionRepository', () => {
       deliveryFee: 8000,
       installments: 1,
       status: 'APPROVED',
-      wompiId: 'wompi-1',
+      providerPaymentId: 'pay-1',
     });
 
-    const result = await repository.updateStatus('tx-1', 'APPROVED', 'wompi-1');
+    const result = await repository.updateStatus('tx-1', 'APPROVED', 'pay-1');
 
     expect(result.status).toBe('APPROVED');
-    expect(result.wompiId).toBe('wompi-1');
+    expect(result.providerPaymentId).toBe('pay-1');
   });
 
   it('finds transaction by id', async () => {
@@ -106,7 +106,7 @@ describe('PrismaTransactionRepository', () => {
       deliveryFee: 8000,
       installments: 3,
       status: 'APPROVED',
-      wompiId: 'wompi-1',
+      providerPaymentId: 'pay-1',
     });
 
     const result = await repository.findById('tx-1');

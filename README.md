@@ -105,7 +105,7 @@ erDiagram
     int deliveryFee
     int installments
     string status
-    string wompiId
+    string providerPaymentId
   }
 ```
 
@@ -213,8 +213,8 @@ API por defecto: `http://localhost:3000` (o el `PORT` de tu `.env`).
 cd frontend
 cp .env.example .env
 # VITE_API_URL=http://localhost:3000
-# VITE_WOMPI_PUBLIC_KEY=...
-# VITE_WOMPI_SANDBOX_URL=...
+# VITE_PAYMENT_PROVIDER_PUBLIC_KEY=...
+# VITE_PAYMENT_PROVIDER_API_URL=...
 npm install
 npm run dev
 ```
@@ -230,18 +230,18 @@ App: `http://localhost:5173`
 | `DATABASE_URL` | PostgreSQL |
 | `CORS_ORIGINS` | Orígenes del front (coma-separados) |
 | `PORT` | Puerto HTTP |
-| `WOMPI_SANDBOX_URL` | URL sandbox |
-| `WOMPI_PUBLIC_KEY` | Llave pública |
-| `WOMPI_PRIVATE_KEY` | Llave privada (solo backend) |
-| `WOMPI_INTEGRITY_KEY` | Firma de integridad (solo backend) |
+| `PAYMENT_PROVIDER_API_URL` | URL sandbox del proveedor |
+| `PAYMENT_PROVIDER_PUBLIC_KEY` | Llave pública |
+| `PAYMENT_PROVIDER_PRIVATE_KEY` | Llave privada (solo backend) |
+| `PAYMENT_PROVIDER_INTEGRITY_KEY` | Firma de integridad (solo backend) |
 
 **Frontend (`.env`)**
 
 | Variable | Uso |
 |----------|-----|
 | `VITE_API_URL` | Base URL del backend |
-| `VITE_WOMPI_PUBLIC_KEY` | Solo llave pública |
-| `VITE_WOMPI_SANDBOX_URL` | Sandbox para tokenización / merchants |
+| `VITE_PAYMENT_PROVIDER_PUBLIC_KEY` | Solo llave pública |
+| `VITE_PAYMENT_PROVIDER_API_URL` | API sandbox para tokenización / merchants |
 
 ## Deploy (resumen)
 
@@ -260,7 +260,7 @@ App: `http://localhost:5173`
 
 Secrets del repo (Settings → Secrets and variables → Actions) ya configurados para este proyecto:
 
-`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_WOMPI_PUBLIC_KEY`, `VITE_WOMPI_SANDBOX_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`, `EB_S3_BUCKET`.
+`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_PAYMENT_PROVIDER_PUBLIC_KEY`, `VITE_PAYMENT_PROVIDER_API_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`, `EB_S3_BUCKET`.
 
 Flujo de trabajo recomendado: desarrollar en feature/`test` → PR a `main` → merge → deploy automático.
 

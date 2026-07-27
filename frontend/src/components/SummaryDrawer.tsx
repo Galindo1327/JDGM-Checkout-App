@@ -20,7 +20,7 @@ import {
 } from '../features/checkout/checkoutSlice';
 import { fetchProducts } from '../features/products/productSlice';
 import { createTransaction } from '../services/api';
-import { tokenizeCard } from '../services/wompi';
+import { tokenizeCard } from '../services/payment-provider';
 import { detectCardBrand, getCardBrandLogo, onlyDigits } from '../utils/card';
 import { getErrorMessage } from '../utils/errors';
 import { BASE_FEE, formatCop, getProductImage } from '../utils/product';

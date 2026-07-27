@@ -26,7 +26,7 @@ import {
   setInstallments,
   setStep,
 } from '../features/checkout/checkoutSlice';
-import { getAcceptanceTokens } from '../services/wompi';
+import { getAcceptanceTokens } from '../services/payment-provider';
 import {
   detectCardBrand,
   formatCardNumber,
@@ -158,7 +158,7 @@ export default function CheckoutModal({
         dispatch(setAcceptanceTokens(tokens));
       } catch {
         if (!cancelled) {
-          setTokensError('No se pudieron cargar las políticas de Wompi.');
+          setTokensError('No se pudieron cargar las políticas del proveedor de pagos.');
         }
       } finally {
         if (!cancelled) setLoadingTokens(false);
@@ -278,7 +278,7 @@ export default function CheckoutModal({
                   })
                   .catch(() => {
                     setTokensError(
-                      'No se pudieron cargar las políticas de Wompi.',
+                      'No se pudieron cargar las políticas del proveedor de pagos.',
                     );
                   })
                   .finally(() => setLoadingTokens(false));

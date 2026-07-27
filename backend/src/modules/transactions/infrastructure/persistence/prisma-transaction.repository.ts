@@ -55,13 +55,13 @@ export class PrismaTransactionRepository implements TransactionRepository {
   async updateStatus(
     id: string,
     status: TransactionStatus,
-    wompiId?: string,
+    providerPaymentId?: string,
   ): Promise<Transaction> {
     const row = await this.prisma.transaction.update({
       where: { id },
       data: {
         status,
-        ...(wompiId !== undefined ? { wompiId } : {}),
+        ...(providerPaymentId !== undefined ? { providerPaymentId } : {}),
       },
     });
     return this.toEntity(row);
@@ -84,7 +84,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
     deliveryFee: number;
     installments: number;
     status: string;
-    wompiId: string | null;
+    providerPaymentId: string | null;
   }): Transaction {
     return new Transaction(
       row.id,
@@ -97,7 +97,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
       row.deliveryFee,
       row.installments,
       row.status as TransactionStatus,
-      row.wompiId,
+      row.providerPaymentId,
     );
   }
 }

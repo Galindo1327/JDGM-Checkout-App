@@ -43,7 +43,7 @@ CREATE TABLE "Transaction" (
     "baseFee" INTEGER NOT NULL,
     "deliveryFee" INTEGER NOT NULL,
     "status" TEXT NOT NULL,
-    "wompiId" TEXT,
+    "providerPaymentId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

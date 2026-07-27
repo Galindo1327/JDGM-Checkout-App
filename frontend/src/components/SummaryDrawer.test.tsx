@@ -19,7 +19,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('../services/wompi', () => ({
+vi.mock('../services/payment-provider', () => ({
   tokenizeCard: vi.fn(),
 }));
 
@@ -45,7 +45,7 @@ vi.mock('../features/products/productSlice', async () => {
   };
 });
 
-import { tokenizeCard } from '../services/wompi';
+import { tokenizeCard } from '../services/payment-provider';
 import { createTransaction } from '../services/api';
 
 const mockedTokenize = vi.mocked(tokenizeCard);
@@ -138,7 +138,7 @@ describe('SummaryDrawer', () => {
       deliveryFee: 8000,
       installments: 6,
       status: 'APPROVED',
-      wompiId: 'wompi-1',
+      providerPaymentId: 'pay-1',
     });
 
     renderSummary();
