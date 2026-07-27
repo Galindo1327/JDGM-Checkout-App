@@ -256,11 +256,11 @@ App: `http://localhost:5173`
 | Workflow | Cuándo corre | Qué hace |
 |----------|--------------|----------|
 | [`deploy-frontend.yml`](./.github/workflows/deploy-frontend.yml) | Push a `main` con cambios en `frontend/**` (o manual) | `npm run build` → sync S3 → invalidación CloudFront |
-| [`deploy-backend.yml`](./.github/workflows/deploy-backend.yml) | Push a `main` con cambios en `backend/**` (o manual) | Empaqueta Docker → Elastic Beanstalk |
+| [`deploy-backend.yml`](./.github/workflows/deploy-backend.yml) | Push a `main` con cambios en `backend/**` (o manual) | Build imagen en GitHub Actions → ECR → Elastic Beanstalk |
 
 Secrets del repo (Settings → Secrets and variables → Actions) ya configurados para este proyecto:
 
-`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_PAYMENT_PROVIDER_PUBLIC_KEY`, `VITE_PAYMENT_PROVIDER_API_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`, `EB_S3_BUCKET`.
+`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_PAYMENT_PROVIDER_PUBLIC_KEY`, `VITE_PAYMENT_PROVIDER_API_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`, `EB_S3_BUCKET`, `ECR_REPOSITORY`.
 
 Flujo de trabajo recomendado: desarrollar en feature/`test` → PR a `main` → merge → deploy automático.
 
