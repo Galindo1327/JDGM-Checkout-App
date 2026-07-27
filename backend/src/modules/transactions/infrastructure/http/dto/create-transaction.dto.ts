@@ -8,6 +8,7 @@ import {
   IsString,
   IsUUID,
   Matches,
+  MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -15,25 +16,29 @@ import {
 export class CustomerDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  @MaxLength(80)
+  name!: string;
 
   @IsEmail()
-  email: string;
+  @MaxLength(120)
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @Matches(/^\d{10}$/, { message: 'El teléfono debe tener 10 dígitos' })
-  phone: string;
+  phone!: string;
 }
 
 export class DeliveryDto {
   @IsString()
   @IsNotEmpty()
-  address: string;
+  @MaxLength(120)
+  address!: string;
 
   @IsString()
   @IsNotEmpty()
-  city: string;
+  @MaxLength(60)
+  city!: string;
 
   @IsOptional()
   @IsInt()
@@ -43,27 +48,30 @@ export class DeliveryDto {
 
 export class CreateTransactionDto {
   @IsUUID()
-  productId: string;
+  productId!: string;
 
   @ValidateNested()
   @Type(() => CustomerDto)
-  customer: CustomerDto;
+  customer!: CustomerDto;
 
   @ValidateNested()
   @Type(() => DeliveryDto)
-  delivery: DeliveryDto;
+  delivery!: DeliveryDto;
 
   @IsString()
   @IsNotEmpty()
-  cardToken: string;
+  @MaxLength(200)
+  cardToken!: string;
 
   @IsString()
   @IsNotEmpty()
-  acceptanceToken: string;
+  @MaxLength(500)
+  acceptanceToken!: string;
 
   @IsString()
   @IsNotEmpty()
-  acceptPersonalAuth: string;
+  @MaxLength(500)
+  acceptPersonalAuth!: string;
 
   @IsOptional()
   @IsInt()
