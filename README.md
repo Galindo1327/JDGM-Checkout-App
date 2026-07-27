@@ -260,7 +260,7 @@ App: `http://localhost:5173`
 
 Secrets del repo (Settings → Secrets and variables → Actions) ya configurados para este proyecto:
 
-`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_WOMPI_PUBLIC_KEY`, `VITE_WOMPI_SANDBOX_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`.
+`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_API_URL`, `VITE_WOMPI_PUBLIC_KEY`, `VITE_WOMPI_SANDBOX_URL`, `EB_APPLICATION_NAME`, `EB_ENVIRONMENT_NAME`, `EB_S3_BUCKET`.
 
 Flujo de trabajo recomendado: desarrollar en feature/`test` → PR a `main` → merge → deploy automático.
 
