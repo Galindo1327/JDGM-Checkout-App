@@ -17,6 +17,9 @@ export class CustomerDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(80)
+  @Matches(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/, {
+    message: 'El nombre solo puede contener letras y espacios',
+  })
   name!: string;
 
   @IsEmail()
@@ -38,6 +41,9 @@ export class DeliveryDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(60)
+  @Matches(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/, {
+    message: 'La ciudad solo puede contener letras y espacios',
+  })
   city!: string;
 
   @IsOptional()
