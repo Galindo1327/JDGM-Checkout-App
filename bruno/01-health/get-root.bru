@@ -1,0 +1,17 @@
+meta {
+  name: GET Health
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/
+  body: none
+  auth: none
+}
+
+docs {
+  # GET /
+  Health check del backend NestJS.
+  Respuesta esperada: texto tipo `Hello World!`
+}
