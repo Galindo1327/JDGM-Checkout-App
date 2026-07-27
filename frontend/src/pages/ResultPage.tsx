@@ -16,35 +16,9 @@ import StoreFooter from '../components/StoreFooter';
 import StoreHeader from '../components/StoreHeader';
 import { resetCheckout } from '../features/checkout/checkoutSlice';
 import { fetchProducts } from '../features/products/productSlice';
-import { formatCop, getProductImage } from '../utils/product';
+import { formatCop, getPaymentStatusMeta, getProductImage } from '../utils/product';
 
 const { Title, Text } = Typography;
-
-function getStatusMeta(status: string) {
-  switch (status) {
-    case 'APPROVED':
-      return {
-        label: 'Pago aprobado',
-        color: '#1f5a34',
-        tone: 'approved' as const,
-        Icon: CheckCircleFilled,
-      };
-    case 'DECLINED':
-      return {
-        label: 'Pago declinado',
-        color: '#b42318',
-        tone: 'declined' as const,
-        Icon: CloseCircleFilled,
-      };
-    default:
-      return {
-        label: status === 'ERROR' ? 'Error en el pago' : `Estado: ${status}`,
-        color: '#b54708',
-        tone: 'other' as const,
-        Icon: ExclamationCircleFilled,
-      };
-  }
-}
 
 export default function ResultPage() {
   const dispatch = useAppDispatch();
@@ -66,8 +40,13 @@ export default function ResultPage() {
     return null;
   }
 
-  const statusMeta = getStatusMeta(transaction.status);
-  const StatusIcon = statusMeta.Icon;
+  const statusMeta = getPaymentStatusMeta(transaction.status);
+  const StatusIcon =
+    statusMeta.tone === 'approved'
+      ? CheckCircleFilled
+      : statusMeta.tone === 'declined'
+        ? CloseCircleFilled
+        : ExclamationCircleFilled;
 
   const handleBackToStore = () => {
     dispatch(resetCheckout());

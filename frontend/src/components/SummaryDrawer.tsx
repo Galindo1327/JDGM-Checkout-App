@@ -11,7 +11,6 @@ import {
   Typography,
 } from 'antd';
 import { CreditCardOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
   setCheckoutError,
@@ -23,30 +22,16 @@ import { fetchProducts } from '../features/products/productSlice';
 import { createTransaction } from '../services/api';
 import { tokenizeCard } from '../services/wompi';
 import { detectCardBrand, getCardBrandLogo, onlyDigits } from '../utils/card';
-import { formatCop, getProductImage } from '../utils/product';
+import { getErrorMessage } from '../utils/errors';
+import { BASE_FEE, formatCop, getProductImage } from '../utils/product';
 import type { Product } from '../types/checkout';
 
 const { Title, Text } = Typography;
-
-export const BASE_FEE = 3000;
 
 interface SummaryDrawerProps {
   open: boolean;
   product: Product | undefined;
   onClose: () => void;
-}
-
-function getErrorMessage(error: unknown): string {
-  if (axios.isAxiosError(error)) {
-    const data = error.response?.data as
-      | { message?: string | string[] }
-      | undefined;
-    if (Array.isArray(data?.message)) return data.message.join(', ');
-    if (typeof data?.message === 'string') return data.message;
-    return error.message;
-  }
-  if (error instanceof Error) return error.message;
-  return 'No se pudo completar el pago';
 }
 
 export default function SummaryDrawer({
