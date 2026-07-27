@@ -46,9 +46,10 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: ${{ secrets.EB_APPLICATION_NAME }}
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
-          version_label: "gha-${{ github.run_number }}-${{ github.sha }}"
+          version_label: "gha-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}"
           region: ${{ secrets.AWS_REGION }}
           deployment_package: eb-deploy.zip
           existing_bucket_name: ${{ secrets.EB_S3_BUCKET }}
+          use_existing_version_if_available: true
           wait_for_deployment: true
           wait_for_environment_recovery: 300
