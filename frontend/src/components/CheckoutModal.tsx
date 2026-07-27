@@ -33,6 +33,7 @@ import {
   getCardBrandLogo,
   onlyDigits,
 } from '../utils/card';
+import { isLettersAndSpaces, onlyLettersAndSpaces } from '../utils/text';
 
 const { Text, Link, Title } = Typography;
 
@@ -97,10 +98,10 @@ export default function CheckoutModal({
     if (!watchedValues.expMonth || !watchedValues.expYear) return false;
     if (!/^\d{3,4}$/.test(cvc)) return false;
     if (![1, 3, 6, 12].includes(Number(watchedValues.installments))) return false;
-    if (!name) return false;
+    if (!isLettersAndSpaces(name)) return false;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
     if (!/^\d{10}$/.test(phone)) return false;
-    if (!address || !city) return false;
+    if (!address || !isLettersAndSpaces(city)) return false;
     if (!watchedValues.acceptedPrivacy || !watchedValues.acceptedPersonalData) {
       return false;
     }
@@ -425,7 +426,20 @@ export default function CheckoutModal({
         <Form.Item
           label="Nombre completo"
           name="name"
-          rules={[{ required: true, message: 'Ingresa tu nombre' }]}
+          rules={[
+            { required: true, message: 'Ingresa tu nombre' },
+            {
+              validator: (_, value?: string) =>
+                isLettersAndSpaces(value ?? '')
+                  ? Promise.resolve()
+                  : Promise.reject(
+                      new Error('Solo letras y espacios'),
+                    ),
+            },
+          ]}
+          getValueFromEvent={(event: ChangeEvent<HTMLInputElement>) =>
+            onlyLettersAndSpaces(event.target.value)
+          }
         >
           <Input placeholder="Juan Pérez" maxLength={80} />
         </Form.Item>
@@ -473,7 +487,20 @@ export default function CheckoutModal({
         <Form.Item
           label="Ciudad"
           name="city"
-          rules={[{ required: true, message: 'Ingresa la ciudad' }]}
+          rules={[
+            { required: true, message: 'Ingresa la ciudad' },
+            {
+              validator: (_, value?: string) =>
+                isLettersAndSpaces(value ?? '')
+                  ? Promise.resolve()
+                  : Promise.reject(
+                      new Error('Solo letras y espacios'),
+                    ),
+            },
+          ]}
+          getValueFromEvent={(event: ChangeEvent<HTMLInputElement>) =>
+            onlyLettersAndSpaces(event.target.value)
+          }
         >
           <Input placeholder="Bogotá" maxLength={60} />
         </Form.Item>
