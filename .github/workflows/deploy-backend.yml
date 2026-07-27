@@ -12,6 +12,13 @@ concurrency:
   group: deploy-backend
   cancel-in-progress: false
 
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  EB_APP: ${{ secrets.EB_APPLICATION_NAME }}
+  EB_ENV: ${{ secrets.EB_ENVIRONMENT_NAME }}
+  EB_BUCKET: ${{ secrets.EB_S3_BUCKET }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,18 +27,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Package Elastic Beanstalk source
-        working-directory: backend
-        run: |
-          zip -r ../eb-deploy.zip . \
-            -x "node_modules/*" \
-            -x "dist/*" \
-            -x "coverage/*" \
-            -x ".env" \
-            -x ".env.*" \
-            -x "*.log" \
-            -x ".git/*"
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -39,17 +34,76 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        working-directory: backend
+        env:
+          IMAGE_TAG: gha-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          REGISTRY="${{ steps.ecr.outputs.registry }}"
+          IMAGE_URI="${REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          IMAGE_LATEST="${REGISTRY}/${ECR_REPOSITORY}:latest"
+
+          docker build -t "$IMAGE_URI" -t "$IMAGE_LATEST" .
+          docker push "$IMAGE_URI"
+          docker push "$IMAGE_LATEST"
+
+          echo "IMAGE_URI=$IMAGE_URI" >> "$GITHUB_ENV"
+          echo "VERSION_LABEL=$IMAGE_TAG" >> "$GITHUB_ENV"
+
+      - name: Package Dockerrun for Elastic Beanstalk
+        run: |
+          set -euo pipefail
+          mkdir -p eb-package/.ebextensions
+          python3 -c 'import json,os; open("eb-package/Dockerrun.aws.json","w",encoding="utf-8").write(json.dumps({"AWSEBDockerrunVersion":"1","Image":{"Name":os.environ["IMAGE_URI"],"Update":"true"},"Ports":[{"ContainerPort":8080,"HostPort":80}]}))'
+          cp backend/.ebextensions/*.config eb-package/.ebextensions/ || true
+          (cd eb-package && zip -r ../eb-deploy.zip .)
+
       - name: Deploy to Elastic Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v22
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ${{ secrets.EB_APPLICATION_NAME }}
-          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
-          version_label: "gha-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}"
-          region: ${{ secrets.AWS_REGION }}
-          deployment_package: eb-deploy.zip
-          existing_bucket_name: ${{ secrets.EB_S3_BUCKET }}
-          use_existing_version_if_available: true
-          wait_for_deployment: true
-          wait_for_environment_recovery: 300
+        run: |
+          set -euo pipefail
+          KEY="${EB_APP}/${VERSION_LABEL}.zip"
+
+          aws s3 cp eb-deploy.zip "s3://${EB_BUCKET}/${KEY}"
+
+          aws elasticbeanstalk create-application-version \
+            --application-name "$EB_APP" \
+            --version-label "$VERSION_LABEL" \
+            --source-bundle "S3Bucket=${EB_BUCKET},S3Key=${KEY}" \
+            --process
+
+          aws elasticbeanstalk update-environment \
+            --environment-name "$EB_ENV" \
+            --version-label "$VERSION_LABEL"
+
+          echo "Waiting for environment Ready/Green..."
+          for i in $(seq 1 60); do
+            STATUS=$(aws elasticbeanstalk describe-environments \
+              --environment-names "$EB_ENV" \
+              --query "Environments[0].Status" --output text)
+            HEALTH=$(aws elasticbeanstalk describe-environments \
+              --environment-names "$EB_ENV" \
+              --query "Environments[0].Health" --output text)
+            VERSION=$(aws elasticbeanstalk describe-environments \
+              --environment-names "$EB_ENV" \
+              --query "Environments[0].VersionLabel" --output text)
+            echo "Attempt $i: status=$STATUS health=$HEALTH version=$VERSION"
+            if [ "$STATUS" = "Ready" ] && [ "$VERSION" = "$VERSION_LABEL" ] && { [ "$HEALTH" = "Green" ] || [ "$HEALTH" = "Yellow" ]; }; then
+              echo "Deploy finished"
+              exit 0
+            fi
+            if [ "$STATUS" = "Ready" ] && [ "$VERSION" != "$VERSION_LABEL" ]; then
+              echo "Deploy failed; unexpected version $VERSION"
+              aws elasticbeanstalk describe-events --environment-name "$EB_ENV" --max-items 10 --output table || true
+              exit 1
+            fi
+            sleep 20
+          done
+
+          echo "Timed out"
+          aws elasticbeanstalk describe-events --environment-name "$EB_ENV" --max-items 12 --output table || true
+          exit 1
